@@ -3,7 +3,7 @@
 # */AIPND-revision/intropyproject-classify-pet-images/get_pet_labels_hints.py
 #                                                                             
 # PROGRAMMER: Kolapo Adedipe
-# DATE CREATED: July 05, 2023                                 
+# DATE CREATED: July 10, 2023                     
 # REVISED DATE: 
 # PURPOSE: This is a *hints* file to help guide students in creating the 
 #          function get_pet_labels that creates the pet labels from the image's
@@ -20,19 +20,42 @@
 # Imports python modules
 from os import listdir
 
+# Define the get_pet_labels function
 def get_pet_labels(image_dir):
-    in_files = listdir(image_dir)
-    results_dic = dict()
+    """
+    Creates a dictionary of pet labels (results_dic) based upon the filenames 
+    of the image files. These pet image labels are used to check the accuracy 
+    of the labels that are returned by the classifier function since the 
+    filenames of the images contain the true identity of the pet in the image.
+    Be sure to format the pet labels so that they are in all lower case letters
+    and with leading and trailing whitespace characters stripped from them.
+    (ex. filename = 'Boston_terrier_02259.jpg' Pet label = 'boston terrier')
+    Parameters:
+     image_dir - The (full) path to the folder of images that are to be
+                 classified by the classifier function (string)
+    Returns:
+      results_dic - Dictionary with 'key' as image filename and 'value' as a 
+      List. The list contains for following item:
+         index 0 = pet image label (string)
+    """
+    # Create an empty dictionary to store the results
+    results_dic = {}
 
-    for idx in range(0, len(in_files), 1):
-        if in_files[idx][0] != ".":
-            pet_label = in_files[idx].lower().split('_')
+    # Get the list of files in the image directory
+    file_list = listdir(image_dir)
+
+    # Process each file in the file list
+    for file_name in file_list:
+        # Ignore files starting with a period as they are hidden files
+        if not file_name.startswith('.'):
+            # Split the file name by underscores to extract the pet label
+            pet_label = file_name.lower().split('_')
+
+            # Remove the file extension from the pet label
             pet_label = ' '.join(pet_label[:-1])
-            pet_label = pet_label.strip()
 
-            if in_files[idx] not in results_dic:
-                results_dic[in_files[idx]] = [pet_label]
-            else:
-                print("** Warning: Duplicate files exist in directory:", in_files[idx])
+            # Add the pet label to the results dictionary
+            results_dic[file_name] = [pet_label]
 
+    # Return the results dictionary
     return results_dic

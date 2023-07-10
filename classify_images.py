@@ -3,7 +3,7 @@
 # */AIPND-revision/intropyproject-classify-pet-images/classify_images.py
 #                                                                             
 # PROGRAMMER: Kolapo Adedipe
-# DATE CREATED: July 05, 2023.                    
+# DATE CREATED: July 10, 2023                    
 # REVISED DATE: 
 # PURPOSE: Create a function classify_images that uses the classifier function 
 #          to create the classifier labels and then compares the classifier 
@@ -20,7 +20,8 @@
 #           of the pet and classifier labels as the item at index 2 of the list.
 #
 ##
-# Imports classifier function for using CNN to classify images 
+# Imports classifier function for using CNN to classify images
+import os
 from classifier import classifier 
 
 # TODO 3: Define classify_images function below, specifically replace the None
@@ -29,10 +30,23 @@ from classifier import classifier
 #       results_dic dictionary that is passed into the function is a mutable 
 #       data type so no return is needed.
 # 
-import os
+# Imports classifier function for using CNN to classify images
 from classifier import classifier
+from os.path import join
+from os import listdir
 
 def classify_images(images_dir, results_dic, model):
+    """
+    Classifies the pet images using a pretrained CNN model.
+    Compares the classifications to the true identity of the pets and updates the results dictionary.
+
+    Parameters:
+    - image_dir: The directory path of the pet images.
+    - results: The results dictionary to store the classification results.
+    - model: The CNN model architecture to use for classification (e.g., 'resnet', 'alexnet', 'vgg').
+    """
+
+    # Iterate over the pet images
     for filename in results_dic:
         # Get the pet image label
         pet_label = results_dic[filename][0]

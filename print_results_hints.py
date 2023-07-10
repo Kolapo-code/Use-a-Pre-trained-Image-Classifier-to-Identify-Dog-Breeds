@@ -3,7 +3,7 @@
 # */AIPND-revision/intropyproject-classify-pet-images/print_results_hints.py
 #                                                                             
 # PROGRAMMER: Kolapo Adedipe
-# DATE CREATED: July 05, 2023
+# DATE CREATED: July 10, 2023
 # REVISED DATE: 
 # PURPOSE: This is a *hints* file to help guide students in creating the 
 #          function print_results that prints the results statistics from the
@@ -33,35 +33,36 @@
 #       Notice that this function doesn't return anything because it prints 
 #       a summary of the results using results_dic and results_stats_dic
 # 
-def print_results(results_dic, results_stats_dic, model, print_incorrect_dogs=False, print_incorrect_breed=False):
+def print_results(results_dic, results_stats_dic, model, 
+                  print_incorrect_dogs=False, print_incorrect_breed=False):
     """
-    Prints summary results on the classification and then prints incorrectly
-    classified dogs and incorrectly classified dog breeds if user indicates
+    Prints summary results on the classification and then prints incorrectly 
+    classified dogs and incorrectly classified dog breeds if user indicates 
     they want those printouts (use non-default values)
     Parameters:
-        results_dic - Dictionary with key as image filename and value as a List
-            (index)
-            idx 0 = pet image label (string)
-            idx 1 = classifier label (string)
-            idx 2 = 1/0 (int) where 1 = match between pet image and classifier labels
-                                      0 = no match between labels
-            idx 3 = 1/0 (int) where 1 = pet image 'is-a' dog
-                                      0 = pet image 'is-NOT-a' dog
-            idx 4 = 1/0 (int) where 1 = classifier classifies image 'as-a' dog
-                                      0 = classifier classifies image 'as-NOT-a' dog
-        results_stats_dic - Dictionary that contains the results statistics (either
-                            a percentage or a count) where the key is the statistic's
-                            name (starting with 'pct' for percentage or 'n' for count)
-                            and the value is the statistic's value
-        model - Indicates which CNN model architecture will be used by the
-                classifier function to classify the pet images,
-                values must be either: resnet alexnet vgg (string)
-        print_incorrect_dogs - True prints incorrectly classified dog images
-                               False doesn't print anything (default) (bool)
-        print_incorrect_breed - True prints incorrectly classified dog breeds
-                                False doesn't print anything (default) (bool)
+      results_dic - Dictionary with key as image filename and value as a List 
+             (index)idx 0 = pet image label (string)
+                    idx 1 = classifier label (string)
+                    idx 2 = 1/0 (int)  where 1 = match between pet image and 
+                            classifer labels and 0 = no match between labels
+                    idx 3 = 1/0 (int)  where 1 = pet image 'is-a' dog and 
+                            0 = pet Image 'is-NOT-a' dog. 
+                    idx 4 = 1/0 (int)  where 1 = Classifier classifies image 
+                            'as-a' dog and 0 = Classifier classifies image  
+                            'as-NOT-a' dog.
+      results_stats_dic - Dictionary that contains the results statistics (either
+                   a  percentage or a count) where the key is the statistic's 
+                     name (starting with 'pct' for percentage or 'n' for count)
+                     and the value is the statistic's value 
+      model - Indicates which CNN model architecture will be used by the 
+              classifier function to classify the pet images,
+              values must be either: resnet alexnet vgg (string)
+      print_incorrect_dogs - True prints incorrectly classified dog images and 
+                             False doesn't print anything(default) (bool)  
+      print_incorrect_breed - True prints incorrectly classified dog breeds and 
+                              False doesn't print anything(default) (bool) 
     Returns:
-        None - simply printing results.
+           None - simply printing results.
     """
     # Prints summary statistics over the run
     print("\n\n*** Results Summary for CNN Model Architecture", model.upper(), "***")
@@ -70,38 +71,27 @@ def print_results(results_dic, results_stats_dic, model, print_incorrect_dogs=Fa
     print("{:20}: {:3d}".format('N Not-Dog Images', results_stats_dic['n_notdogs_img']))
 
     # Prints summary statistics (percentages) on Model Run
-    print(" ")
+    print("\n")
     for key, value in results_stats_dic.items():
         if key.startswith('p'):
-            print("{:20}: {:.1f}".format(key, value))
+            print("{:20}: {:.1f}%".format(key, value))
 
-    # IF print_incorrect_dogs == True AND there were images incorrectly
+    # If print_incorrect_dogs == True AND there were images incorrectly 
     # classified as dogs or vice versa - print out these cases
-    if print_incorrect_dogs and (
-            (results_stats_dic['n_correct_dogs'] + results_stats_dic['n_correct_notdogs']) != results_stats_dic[
-        'n_images']
-    ):
+    if print_incorrect_dogs and (results_stats_dic['n_correct_dogs'] + results_stats_dic['n_correct_notdogs'] != results_stats_dic['n_images']):
         print("\nINCORRECT Dog/NOT Dog Assignments:")
 
         # Process through results dict, printing incorrectly classified dogs
-        for key in results_dic:
-            pet_label, classifier_label, match, is_dog, is_classified_as_dog = results_dic[key]
+        for key, value in results_dic.items():
+            if value[3] != value[4]:  # Pet label is-a-dog, classified as NOT-a-dog or vice versa
+                print("Real: {:>26}   Classifier: {:>30}".format(value[0], value[1]))
 
-            # Pet Image Label is-a-dog and classifier label is-NOT-a-dog
-            # OR
-            # Pet Image Label is-NOT-a-dog and classifier label is-a-dog
-            if (is_dog == 1 and is_classified_as_dog == 0) or (is_dog == 0 and is_classified_as_dog == 1):
-                print("Pet Label: {:>26}   Classifier Label: {:>30}".format(pet_label, classifier_label))
-
-    # IF print_incorrect_breed == True AND there were dogs whose breeds
-    # were incorrectly classified - print out these cases
-    if print_incorrect_breed and (results_stats_dic['n_correct_dogs'] != results_stats_dic['n_correct_breed']):
+    # If print_incorrect_breed == True AND there were dogs whose breeds 
+    # were incorrectly classified - print out these cases                    
+    if print_incorrect_breed and results_stats_dic['n_correct_dogs'] != results_stats_dic['n_correct_breed']:
         print("\nINCORRECT Dog Breed Assignment:")
 
         # Process through results dict, printing incorrectly classified breeds
-        for key in results_dic:
-            pet_label, classifier_label, match, is_dog, is_classified_as_dog = results_dic[key]
-
-            # Pet Image Label is-a-Dog, classified as-a-dog but is WRONG breed
-            if is_dog == 1 and match == 0:
-                print("Real: {:>26}   Classifier: {:>30}".format(pet_label, classifier_label))
+        for key, value in results_dic.items():
+            if sum(value[3:]) == 2 and value[2] == 0:  # Pet label is-a-dog, classified as-a-dog but is WRONG breed
+                print("Real: {:>26}   Classifier: {:>30}".format(value[0], value[1]))

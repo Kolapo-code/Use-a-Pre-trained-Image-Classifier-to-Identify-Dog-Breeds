@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/adjust_results4_isadog.py
 #                                                                             
-# PROGRAMMER: Kolapo Adedipe 
-# DATE CREATED: July 05, 2023.                    
+# PROGRAMMER: Kolapo Adedipe
+# DATE CREATED: July 10, 2023                    
 # REVISED DATE: 
 # PURPOSE: Create a function adjust_results4_isadog that adjusts the results 
 #          dictionary to indicate whether or not the pet image label is of-a-dog, 
@@ -38,22 +38,54 @@
 #       data type so no return is needed.
 # 
 def adjust_results4_isadog(results_dic, dogfile):
-    # Create a dictionary of dog names from the dogfile
+    """
+    Adjusts the results dictionary to determine if classifier correctly 
+    classified images 'as a dog' or 'not a dog' especially when not a match. 
+    Demonstrates if model architecture correctly classifies dog images even if
+    it gets dog breed wrong (not a match).
+    Parameters:
+      results_dic - Dictionary with 'key' as image filename and 'value' as a 
+                    List. Where the list will contain the following items: 
+                  index 0 = pet image label (string)
+                  index 1 = classifier label (string)
+                  index 2 = 1/0 (int)  where 1 = match between pet image
+                    and classifer labels and 0 = no match between labels
+                ------ where index 3 & index 4 are added by this function -----
+                 NEW - index 3 = 1/0 (int)  where 1 = pet image 'is-a' dog and 
+                            0 = pet Image 'is-NOT-a' dog. 
+                 NEW - index 4 = 1/0 (int)  where 1 = Classifier classifies image 
+                            'as-a' dog and 0 = Classifier classifies image  
+                            'as-NOT-a' dog.
+     dogfile - A text file that contains names of all dogs from the classifier
+               function and dog names from the pet image files. This file has 
+               one dog name per line dog names are all in lowercase with 
+               spaces separating the distinct words of the dog name. Dog names
+               from the classifier function can be a string of dog names separated
+               by commas when a particular breed of dog has multiple dog names 
+               associated with that breed (ex. maltese dog, maltese terrier, 
+               maltese) (string - indicates text file's filename)
+    Returns:
+           None - results_dic is mutable data type so no return needed.
+    """ 
+    # Read dog names from the dogfile into a dictionary or list
     dog_names = {}
     with open(dogfile, 'r') as file:
         for line in file:
-            dog_names[line.strip()] = 1
-    
-    # Iterate through the results dictionary
+            dog_names[line.strip()] = 1  # Use a dictionary to store dog names
+        
+    # Iterate through the results dictionary and adjust indices 3 and 4
     for key in results_dic:
+        pet_label = results_dic[key][0]
+        classifier_label = results_dic[key][1]
+        
         # Check if pet image label is a dog
-        if results_dic[key][1] in dog_names:
-            results_dic[key].append(1)
+        if pet_label in dog_names:
+            results_dic[key].append(1)  # Pet image 'is-a' dog
         else:
-            results_dic[key].append(0)
+            results_dic[key].append(0)  # Pet image 'is-NOT-a' dog
         
         # Check if classifier label is a dog
-        if results_dic[key][1] in dog_names:
-            results_dic[key].append(1)
+        if classifier_label in dog_names:
+            results_dic[key].append(1)  # Classifier classifies image 'as-a' dog
         else:
-            results_dic[key].append(0)
+            results_dic[key].append(0)  # Classifier classifies image 'as-NOT-a' dog
