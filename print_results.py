@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # */AIPND-revision/intropyproject-classify-pet-images/print_results.py
 #                                                                             
@@ -26,7 +25,7 @@
 #         This function does not output anything other than printing a summary
 #         of the final results.
 ##
-# TODO 6: Define print_results function below, specifically replace the None
+#       Define print_results function below, specifically replace the None
 #       below by the function definition of the print_results function. 
 #       Notice that this function doesn't to return anything because it  
 #       prints a summary of the results using results_dic and results_stats_dic
@@ -69,9 +68,11 @@ def print_results(results_dic, results_stats_dic, model, print_incorrect_dogs=Fa
     print("Percentage of correct dog classifications:", results_stats_dic['pct_correct_dogs'])
     print("Percentage of correct not-a-dog classifications:", results_stats_dic['pct_correct_notdogs'])
     print("Percentage of correct breed classifications:", results_stats_dic['pct_correct_breed'])
-
+    print("Percentage of correct match:", results_stats_dic['pct_match'])
+    
     # Print incorrectly classified dog images if requested
-    if print_incorrect_dogs:
+    if print_incorrect_dogs and (results_stats_dic['n_correct_dogs'] + results_stats_dic['n_correct_notdogs'] != results_stats_dic['n_images']):
+        print("The number of correct dogs + the number of correct not dogs is not equal to the number of images.")
         print("\n*** Incorrectly classified dog images ***")
         for key, value in results_dic.items():
             if sum(value[3:]) == 1:  # Incorrectly classified dog image
@@ -80,7 +81,8 @@ def print_results(results_dic, results_stats_dic, model, print_incorrect_dogs=Fa
                 print("  Classified label:", value[1])
 
     # Print incorrectly classified dog breeds if requested
-    if print_incorrect_breed:
+    if print_incorrect_breed and (results_stats_dic['n_correct_dogs'] != results_stats_dic['n_correct_breed']):
+        print("The number of correct dogs is not equal to the number of correct breeds.")
         print("\n*** Incorrectly classified dog breeds ***")
         for key, value in results_dic.items():
             if sum(value[3:]) == 2 and value[2] == 0:  # Incorrectly classified breed

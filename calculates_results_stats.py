@@ -38,7 +38,7 @@
 #            pct_correct_notdogs - percentage of correctly classified NON-dogs
 #
 ##
-# TODO 5: Define calculates_results_stats function below, please be certain to replace None
+#       Define calculates_results_stats function below, please be certain to replace None
 #       in the return statement with the results_stats_dic dictionary that you create 
 #       with this function
 # 
@@ -80,7 +80,7 @@ def calculates_results_stats(results_dic):
     n_correct_breed = 0
 
     # Iterate through the results dictionary
-    for key in results_dic:
+    for key, value in results_dic.items():
         # Increment counts based on the values in the results dictionary
         if results_dic[key][3] == 1:
             n_dogs_img += 1

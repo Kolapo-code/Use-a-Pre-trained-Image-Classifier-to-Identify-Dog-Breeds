@@ -51,7 +51,7 @@ def get_pet_labels(image_dir):
             pet_label = file_name.lower().split('_')
 
             # Remove the file extension from the pet label
-            pet_label = ''.join(pet_label[:-1])
+            pet_label = ' '.join(pet_label[:-1])
 
             # Add the pet label to the results dictionary
             results_dic[file_name] = [pet_label]

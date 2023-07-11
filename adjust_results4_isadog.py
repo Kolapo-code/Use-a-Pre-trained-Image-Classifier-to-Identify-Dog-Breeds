@@ -31,7 +31,7 @@
 #           label isn't a dog.
 #
 ##
-# TODO 4: Define adjust_results4_isadog function below, specifically replace the None
+#       Define adjust_results4_isadog function below, specifically replace the None
 #       below by the function definition of the adjust_results4_isadog function. 
 #       Notice that this function doesn't return anything because the 
 #       results_dic dictionary that is passed into the function is a mutable 
@@ -74,7 +74,7 @@ def adjust_results4_isadog(results_dic, dogfile):
             dog_names[line.strip()] = 1  # Use a dictionary to store dog names
         
     # Iterate through the results dictionary and adjust indices 3 and 4
-    for key in results_dic:
+    for key, value in results_dic.items():
         pet_label = results_dic[key][0]
         classifier_label = results_dic[key][1]
         
@@ -85,7 +85,5 @@ def adjust_results4_isadog(results_dic, dogfile):
             results_dic[key].append(0)  # Pet image 'is-NOT-a' dog
         
         # Check if classifier label is a dog
-        if classifier_label in dog_names:
-            results_dic[key].append(1)  # Classifier classifies image 'as-a' dog
-        else:
-            results_dic[key].append(0)  # Classifier classifies image 'as-NOT-a' dog
+        match = int(classifier_label in dog_names)  # Classifier classifies image 'as-a' dog
+        results_dic[key].append(match)  # Classifier classifies image 'as-NOT-a' dog

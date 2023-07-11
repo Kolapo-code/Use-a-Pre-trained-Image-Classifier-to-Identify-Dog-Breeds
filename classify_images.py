@@ -24,7 +24,7 @@
 import os
 from classifier import classifier 
 
-# TODO 3: Define classify_images function below, specifically replace the None
+#       Define classify_images function below, specifically replace the None
 #       below by the function definition of the classify_images function. 
 #       Notice that this function doesn't return anything because the 
 #       results_dic dictionary that is passed into the function is a mutable 
@@ -47,7 +47,7 @@ def classify_images(images_dir, results_dic, model):
     """
 
     # Iterate over the pet images
-    for filename in results_dic:
+    for filename, value in results_dic.items():
         # Get the pet image label
         pet_label = results_dic[filename][0]
         
@@ -63,7 +63,7 @@ def classify_images(images_dir, results_dic, model):
         # Add the classifier label to the results_dic
         results_dic[filename].append(classifier_label)
         
-        # Compare the pet and classifier labels
+         # Compare the pet and classifier labels
         if pet_label in classifier_label:
             results_dic[filename].append(1)  # Match between labels
         else:

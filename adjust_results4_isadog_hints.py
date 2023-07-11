@@ -32,7 +32,7 @@
 #           label isn't a dog.
 #
 ##
-# TODO 4: EDIT and ADD code BELOW to do the following that's stated in the 
+#       EDIT and ADD code BELOW to do the following that's stated in the 
 #       comments below that start with "TODO: 4" for the adjust_results4_isadog 
 #       function. Specifically EDIT and ADD code to define the 
 #       adjust_results4_isadog function. Notice that this function doesn't return
@@ -100,7 +100,7 @@ def adjust_results4_isadog(results_dic, dogfile):
     # List Index 4 = whether(1) or not(0) Classifier Label is a dog
     # How - iterate through results_dic if labels are found in dognames_dic
     # then label "is a dog" index3/4=1 otherwise index3/4=0 "not a dog"
-    for key in results_dic:
+    for key, value in results_dic.items():
 
         # Pet Image Label IS of Dog (e.g. found in dognames_dic)
         if results_dic[key][0] in dognames_dic:
